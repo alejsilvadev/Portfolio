@@ -70,7 +70,7 @@ $lottie_url = $highlight_lottie ? wp_get_attachment_url($highlight_lottie) : '';
             </div>
         </div>
 
-        <?php if ($highlight_title || $highlight_text || $highlight_image || $highlight_lottie) : ?>
+        <?php if ($highlight_title || $highlight_text || $highlight_image) : ?>
             <div class="project-highlight">
                 <div class="project-highlight-text">
                     <?php if ($highlight_title) : ?>
@@ -82,19 +82,11 @@ $lottie_url = $highlight_lottie ? wp_get_attachment_url($highlight_lottie) : '';
                         </div>
                     <?php endif; ?>
                 </div>
-                <div class="project-highlight-media">
-                    <?php if ($highlight_media_type === 'lottie' && $lottie_url) : ?>
-                        <lottie-player
-                            src="<?php echo esc_url($lottie_url); ?>"
-                            background="transparent"
-                            speed="1"
-                            loop
-                            autoplay>
-                        </lottie-player>
-                    <?php elseif ($highlight_image) : ?>
+                <?php if ($highlight_image) : ?>
+                    <div class="project-highlight-image">
                         <?php echo wp_get_attachment_image($highlight_image, 'large'); ?>
-                    <?php endif; ?>
-                </div>
+                    </div>
+                <?php endif; ?>
             </div>
         <?php endif; ?>
     </div>
