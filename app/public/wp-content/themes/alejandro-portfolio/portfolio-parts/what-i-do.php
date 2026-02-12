@@ -51,7 +51,7 @@
             </div>
             <div class="what-i-do-animation">
                 <lottie-player
-                    src="<?php echo get_template_directory_uri(); ?>/assets/web_development.json"
+                    src="<?php echo get_template_directory_uri(); ?>/assets/web-development.json"
                     background="transparent"
                     speed="1"
                     style="width: 400px; height: 400px;"
