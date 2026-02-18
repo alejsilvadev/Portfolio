@@ -15,8 +15,21 @@ document.addEventListener('DOMContentLoaded', function() {
     // Homepage Hero Animations
     initHomeHeroAnimations();
 
+    // Hero parallax background
+    initHeroParallax();
+
+    // Typewriter effect
+    initTypewriter();
+
+
     // Section Fade-In Animations
     initSectionAnimations();
+
+    // Logo Carousel scroll-driven movement
+    initLogoCarousel();
+
+    // Service Accordion
+    initServiceAccordion();
 });
 
 function handleAnchorLinks() {
@@ -62,12 +75,11 @@ function initSectionAnimations() {
     // Sections to animate (Portfolio page)
     const sections = [
         { selector: '.about', elements: ['.about .section-header', '.about-image', '.about-text'] },
-        { selector: '.logo-carousel', elements: ['.logo-carousel-container'] },
         { selector: '.what-i-do', elements: ['.what-i-do-text', '.what-i-do-animation'] },
         { selector: '.projects', elements: ['.projects .section-header', '.project-card'] },
         { selector: '.contact', elements: ['.contact .section-header', '.contact-info', '.contact-form'] },
         // Homepage sections
-        { selector: '.home-services', elements: ['.home-services .section-header', '.service-card'] },
+        { selector: '.home-services', elements: ['.home-services .section-header', '.services-phone-mockup', '.service-item'] },
         { selector: '.home-showcase', elements: ['.home-showcase .section-header', '.showcase-gallery', '.showcase-info'] },
         { selector: '.home-automation', elements: ['.home-automation .section-header', '.automation-visual', '.automation-text'] },
         { selector: '.home-pricing', elements: ['.home-pricing .section-header', '.pricing-card'] },
@@ -268,9 +280,12 @@ function initHomeHeroAnimations() {
     // Set initial states (hidden)
     gsap.set('.home-hero-badge', { opacity: 0, y: 30 });
     gsap.set('.home-hero-title', { opacity: 0, y: 50 });
+    gsap.set('.typewriter-wrapper', { opacity: 0, y: 20 });
     gsap.set('.home-hero-description', { opacity: 0, y: 30 });
     gsap.set('.home-hero-buttons .btn', { opacity: 0, y: 20 });
     gsap.set('.stat-item', { opacity: 0, y: 30 });
+    gsap.set('.laptop-mockup', { opacity: 0, y: 40, scale: 0.95 });
+    gsap.set('.hero-caption', { opacity: 0, y: 20 });
 
     // Animate hero elements in sequence
     homeHeroTimeline
@@ -285,6 +300,11 @@ function initHomeHeroAnimations() {
             duration: 0.8,
             ease: 'power4.out'
         }, '-=0.3')
+        .to('.typewriter-wrapper', {
+            opacity: 1,
+            y: 0,
+            duration: 0.6
+        }, '-=0.4')
         .to('.home-hero-description', {
             opacity: 1,
             y: 0,
@@ -296,10 +316,182 @@ function initHomeHeroAnimations() {
             duration: 0.5,
             stagger: 0.15
         }, '-=0.3')
+        .to('.laptop-mockup', {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 1,
+            ease: 'power3.out'
+        }, '-=0.8')
+        .to('.hero-caption', {
+            opacity: 1,
+            y: 0,
+            duration: 0.5
+        }, '-=0.4')
         .to('.stat-item', {
             opacity: 1,
             y: 0,
             duration: 0.6,
             stagger: 0.1
         }, '-=0.3');
+
+    // Screenshot slideshow
+    initLaptopSlideshow();
+}
+
+function initTypewriter() {
+    var el = document.querySelector('.typewriter-text');
+    if (!el) return;
+
+    var phrases = ['Website Development', 'Workflow Automation', 'Website Design'];
+    var phraseIndex = 0;
+    var charIndex = 0;
+    var isDeleting = false;
+    var typeSpeed = 100;
+    var deleteSpeed = 50;
+    var pauseAfterType = 2000;
+    var pauseAfterDelete = 500;
+
+    function tick() {
+        var current = phrases[phraseIndex];
+
+        if (!isDeleting) {
+            charIndex++;
+            el.textContent = current.substring(0, charIndex);
+
+            if (charIndex === current.length) {
+                isDeleting = true;
+                setTimeout(tick, pauseAfterType);
+                return;
+            }
+            setTimeout(tick, typeSpeed);
+        } else {
+            charIndex--;
+            el.textContent = current.substring(0, charIndex);
+
+            if (charIndex === 0) {
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                setTimeout(tick, pauseAfterDelete);
+                return;
+            }
+            setTimeout(tick, deleteSpeed);
+        }
+    }
+
+    tick();
+}
+
+function initHeroParallax() {
+    // Handled via CSS background-attachment: fixed
+}
+
+function initLogoCarousel() {
+    var rows = document.querySelectorAll('.logo-carousel-row');
+    if (!rows.length) return;
+
+    var scrollDistance = 100;
+    var initialized = false;
+
+    function setup() {
+        if (initialized) return;
+        initialized = true;
+
+        rows.forEach(function(row) {
+            var direction = parseInt(row.getAttribute('data-direction')) || 1;
+            // Use the first item's width * item count / 3 for reliable measurement
+            var items = row.querySelectorAll('.logo-carousel-item');
+            var totalItems = items.length;
+            var oneThird = Math.floor(totalItems / 3);
+            var itemWidth = 0;
+
+            // Measure actual rendered width of one set
+            for (var i = 0; i < oneThird; i++) {
+                itemWidth += items[i].offsetWidth + 60; // 60 = gap
+            }
+
+            var startX = -itemWidth;
+
+            gsap.set(row, { x: startX });
+
+            gsap.fromTo(row,
+                { x: startX - (direction * scrollDistance) },
+                {
+                    x: startX + (direction * scrollDistance),
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: '.logo-carousel',
+                        start: 'top bottom',
+                        end: 'bottom top',
+                        scrub: 0.5
+                    }
+                }
+            );
+        });
+
+        ScrollTrigger.refresh();
+    }
+
+    // Try setup after a short delay, and also on window load as backup
+    setTimeout(setup, 500);
+    window.addEventListener('load', setup);
+}
+
+function initServiceAccordion() {
+    const items = document.querySelectorAll('.service-item');
+    if (!items.length) return;
+
+    const isTouchDevice = window.matchMedia('(hover: none)').matches;
+
+    if (isTouchDevice) {
+        // Mobile: tap to toggle
+        items.forEach(function(item) {
+            item.querySelector('.service-item-header').addEventListener('click', function() {
+                const wasActive = item.classList.contains('active');
+                items.forEach(function(i) { i.classList.remove('active'); });
+                if (!wasActive) item.classList.add('active');
+            });
+        });
+    } else {
+        // Desktop: hover to open
+        items.forEach(function(item) {
+            item.addEventListener('mouseenter', function() {
+                items.forEach(function(i) { i.classList.remove('active'); });
+                item.classList.add('active');
+            });
+        });
+
+        // Close when mouse leaves the whole accordion
+        var accordion = document.querySelector('.services-accordion');
+        if (accordion) {
+            accordion.addEventListener('mouseleave', function() {
+                items.forEach(function(i) { i.classList.remove('active'); });
+            });
+        }
+    }
+}
+
+function initLaptopSlideshow() {
+    const slides = document.querySelectorAll('.laptop-slide');
+    if (slides.length <= 1) return;
+
+    let current = 0;
+    const interval = 3500;
+
+    setInterval(function() {
+        const prev = current;
+        current = (current + 1) % slides.length;
+
+        // Current slide exits to the left
+        slides[prev].classList.remove('active');
+        slides[prev].classList.add('exit');
+
+        // New slide enters from the right
+        slides[current].classList.add('active');
+
+        // Clean up exit class after transition ends
+        setTimeout(function() {
+            slides[prev].classList.remove('exit');
+        }, 600);
+    }, interval);
 }

@@ -12,14 +12,14 @@
 <header class="site-header">
     <nav class="nav-container">
         <a href="<?php echo esc_url(home_url('/')); ?>" class="logo">
-            Alejandro<span>.</span>
+            <img src="<?php echo esc_url(home_url('/wp-content/uploads/2026/02/Screenshot-2026-02-16-230051.png')); ?>" alt="Silva Development">
         </a>
         <nav class="main-nav">
             <ul>
                 <li><a href="<?php echo esc_url(home_url('/')); ?>">Home</a></li>
                 <li><a href="<?php echo esc_url(home_url('/portfolio')); ?>">Portfolio</a></li>
                 <li><a href="<?php echo esc_url(home_url('/portfolio#projects')); ?>">Projects</a></li>
-                <li><a href="<?php echo esc_url(home_url('/portfolio#contact')); ?>">Contact</a></li>
+                <li><a href="<?php echo esc_url(home_url('/contact')); ?>">Contact</a></li>
             </ul>
         </nav>
     </nav>

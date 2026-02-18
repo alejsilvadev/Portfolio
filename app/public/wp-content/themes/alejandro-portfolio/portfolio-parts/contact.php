@@ -3,9 +3,9 @@
  * Template Part: Contact Section
  */
 
-$contact_email = get_theme_mod('contact_email', 'hello@alejandrosilva.com');
-$contact_phone = get_theme_mod('contact_phone', '+1 (555) 123-4567');
-$contact_location = get_theme_mod('contact_location', 'New York, USA');
+$contact_email = get_theme_mod('contact_email', 'alejsilvadev@gmail.com');
+$contact_phone = get_theme_mod('contact_phone', '+1 (908) 947-5781');
+$contact_location = get_theme_mod('contact_location', 'Frenchtown, NJ, USA');
 $social_github = get_theme_mod('social_github', '#');
 $social_linkedin = get_theme_mod('social_linkedin', '#');
 $social_twitter = get_theme_mod('social_twitter', '#');
@@ -80,37 +80,9 @@ $social_twitter = get_theme_mod('social_twitter', '#');
                     <?php endif; ?>
                 </div>
             </div>
-            <form class="contact-form" method="post" action="">
-                <?php
-                if (get_transient('contact_form_success')) {
-                    delete_transient('contact_form_success');
-                    echo '<p style="color: #10b981; margin-bottom: 20px;">Thank you! Your message has been sent successfully.</p>';
-                }
-                if (get_transient('contact_form_error')) {
-                    delete_transient('contact_form_error');
-                    echo '<p style="color: #ef4444; margin-bottom: 20px;">Sorry, there was an error sending your message. Please try again.</p>';
-                }
-                ?>
-                <div class="form-group">
-                    <label for="contact_name">Your Name</label>
-                    <input type="text" id="contact_name" name="contact_name" placeholder="John Doe" required>
-                </div>
-                <div class="form-group">
-                    <label for="contact_email">Your Email</label>
-                    <input type="email" id="contact_email" name="contact_email" placeholder="john@example.com" required>
-                </div>
-                <div class="form-group">
-                    <label for="contact_message">Your Message</label>
-                    <textarea id="contact_message" name="contact_message" placeholder="Tell me about your project..." required></textarea>
-                </div>
-                <button type="submit" name="alejandro_contact_submit" class="btn-submit">
-                    Send Message
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline; margin-left: 8px;">
-                        <line x1="22" y1="2" x2="11" y2="13"/>
-                        <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-                    </svg>
-                </button>
-            </form>
+            <div class="contact-form">
+                <?php echo do_shortcode('[contact-form-7 id="20274c5" title="Contact Page"]'); ?>
+            </div>
         </div>
     </div>
 </section>

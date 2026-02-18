@@ -17,27 +17,26 @@ $skills = get_theme_mod('skills', 'HTML5, CSS3, JavaScript, React, Node.js, PHP,
         <div class="about-content">
             <div class="about-image">
                 <lottie-player
-                    src="<?php echo get_template_directory_uri(); ?>/assets/developer_icon.json"
+                    src="<?php echo get_template_directory_uri(); ?>/assets/music.json"
                     background="transparent"
                     speed="1"
-                    style="width: 400px; height: 400px;"
+                    style="width: 250px; height: auto;"
                     loop
                     autoplay>
                 </lottie-player>
             </div>
             <div class="about-text">
-                <h3>A Developer Who Cares About Quality</h3>
+                <h3>Building things and vibing</h3>
                 <p><?php echo esc_html($about_text); ?></p>
-                <p>I specialize in creating clean, efficient code that delivers exceptional user experiences. Whether it's a simple landing page or a complex web application, I approach every project with the same dedication to excellence.</p>
                 <div class="skills-list">
                     <?php
                     $skills_array = array_map('trim', explode(',', $skills));
                     foreach ($skills_array as $skill) :
                     ?>
-                        <span class="skill-tag"><?php echo esc_html($skill); ?></span>
                     <?php endforeach; ?>
                 </div>
             </div>
+
         </div>
     </div>
 </section>

@@ -29,7 +29,7 @@ function alejandro_enqueue_assets() {
     // Google Fonts
     wp_enqueue_style(
         'google-fonts',
-        'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap',
+        'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sankofa+Display&display=swap',
         array(),
         null
     );
@@ -554,6 +554,221 @@ function alejandro_showcase_page() {
     <?php
 }
 
+// Hero Screenshots Admin Page
+function alejandro_add_hero_screenshots_menu() {
+    add_menu_page(
+        'Hero Screenshots',
+        'Hero Screenshots',
+        'manage_options',
+        'hero-screenshots',
+        'alejandro_hero_screenshots_page',
+        'dashicons-laptop',
+        29
+    );
+}
+add_action('admin_menu', 'alejandro_add_hero_screenshots_menu');
+
+function alejandro_hero_screenshots_page() {
+    if (isset($_POST['save_hero_screenshots']) && check_admin_referer('save_hero_screenshots')) {
+        $images = array();
+        if (isset($_POST['hero_screenshots']) && is_array($_POST['hero_screenshots'])) {
+            foreach ($_POST['hero_screenshots'] as $image) {
+                $images[] = array(
+                    'id' => absint($image['id']),
+                    'url' => esc_url_raw($image['url']),
+                    'caption' => sanitize_text_field($image['caption'] ?? '')
+                );
+            }
+        }
+        $caption = isset($_POST['hero_caption']) ? sanitize_text_field($_POST['hero_caption']) : '';
+        update_option('hero_screenshots', $images);
+        update_option('hero_caption', $caption);
+        echo '<div class="notice notice-success"><p>Hero screenshots saved successfully!</p></div>';
+    }
+
+    $saved_images = get_option('hero_screenshots', array());
+    $hero_caption = get_option('hero_caption', '');
+    ?>
+    <div class="wrap">
+        <h1>Hero Screenshots</h1>
+        <p>Add screenshots of websites you've built. These will cycle inside the laptop mockup in the hero section.</p>
+        <p><strong>Tip:</strong> For the best look, use screenshots at <strong>1280x800</strong> or <strong>16:10 aspect ratio</strong>. Take full-page browser screenshots without the browser chrome (address bar, tabs) for the cleanest result.</p>
+
+        <form method="post">
+            <?php wp_nonce_field('save_hero_screenshots'); ?>
+
+            <table class="form-table">
+                <tr>
+                    <th><label for="hero_caption">Hero Caption</label></th>
+                    <td>
+                        <input type="text" id="hero_caption" name="hero_caption" value="<?php echo esc_attr($hero_caption); ?>" class="regular-text" placeholder="e.g., Sites I've built for real clients">
+                        <p class="description">Displayed below the laptop mockup.</p>
+                    </td>
+                </tr>
+            </table>
+
+            <h2>Screenshots</h2>
+            <div id="hero-screenshots-list" style="display: flex; flex-wrap: wrap; gap: 20px; margin: 20px 0;">
+                <?php foreach ($saved_images as $index => $image) : ?>
+                    <div class="hero-screenshot-item" style="position: relative; background: #f0f0f0; padding: 15px; border-radius: 8px; width: 300px;">
+                        <img src="<?php echo esc_url($image['url']); ?>" style="width: 100%; height: 180px; object-fit: cover; object-position: top; border-radius: 4px;">
+                        <input type="hidden" name="hero_screenshots[<?php echo $index; ?>][id]" value="<?php echo esc_attr($image['id']); ?>">
+                        <input type="hidden" name="hero_screenshots[<?php echo $index; ?>][url]" value="<?php echo esc_url($image['url']); ?>">
+                        <div style="margin-top: 10px;">
+                            <input type="text" name="hero_screenshots[<?php echo $index; ?>][caption]" value="<?php echo esc_attr($image['caption'] ?? ''); ?>" placeholder="Site name (optional)" style="width: 100%;">
+                        </div>
+                        <button type="button" class="remove-hero-screenshot" style="position: absolute; top: -10px; right: -10px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer;">&times;</button>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+
+            <button type="button" id="add-hero-screenshot" class="button button-secondary">Add Screenshot</button>
+            <p></p>
+            <input type="submit" name="save_hero_screenshots" class="button button-primary" value="Save Screenshots">
+        </form>
+    </div>
+
+    <script>
+    jQuery(document).ready(function($) {
+        var mediaUploader;
+        var imgIndex = <?php echo count($saved_images); ?>;
+
+        $('#add-hero-screenshot').on('click', function(e) {
+            e.preventDefault();
+            if (mediaUploader) {
+                mediaUploader.open();
+                return;
+            }
+            mediaUploader = wp.media({
+                title: 'Select Website Screenshot',
+                button: { text: 'Add Screenshot' },
+                multiple: true,
+                library: { type: 'image' }
+            });
+            mediaUploader.on('select', function() {
+                var attachments = mediaUploader.state().get('selection').toJSON();
+                attachments.forEach(function(attachment) {
+                    var imgUrl = attachment.sizes.large ? attachment.sizes.large.url : attachment.url;
+                    var html = '<div class="hero-screenshot-item" style="position: relative; background: #f0f0f0; padding: 15px; border-radius: 8px; width: 300px;">';
+                    html += '<img src="' + imgUrl + '" style="width: 100%; height: 180px; object-fit: cover; object-position: top; border-radius: 4px;">';
+                    html += '<input type="hidden" name="hero_screenshots[' + imgIndex + '][id]" value="' + attachment.id + '">';
+                    html += '<input type="hidden" name="hero_screenshots[' + imgIndex + '][url]" value="' + imgUrl + '">';
+                    html += '<div style="margin-top: 10px;">';
+                    html += '<input type="text" name="hero_screenshots[' + imgIndex + '][caption]" value="" placeholder="Site name (optional)" style="width: 100%;">';
+                    html += '</div>';
+                    html += '<button type="button" class="remove-hero-screenshot" style="position: absolute; top: -10px; right: -10px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer;">&times;</button>';
+                    html += '</div>';
+                    $('#hero-screenshots-list').append(html);
+                    imgIndex++;
+                });
+            });
+            mediaUploader.open();
+        });
+
+        $(document).on('click', '.remove-hero-screenshot', function() {
+            $(this).parent('.hero-screenshot-item').remove();
+        });
+    });
+    </script>
+    <?php
+}
+
+// Enqueue media on hero-screenshots and services-phone admin pages
+function alejandro_enqueue_hero_admin_scripts($hook) {
+    if ($hook === 'toplevel_page_hero-screenshots' || $hook === 'toplevel_page_services-phone-video') {
+        wp_enqueue_media();
+    }
+}
+add_action('admin_enqueue_scripts', 'alejandro_enqueue_hero_admin_scripts');
+
+// Services Phone Video Admin Page
+function alejandro_add_services_phone_menu() {
+    add_menu_page(
+        'Services Phone Video',
+        'Services Phone Video',
+        'manage_options',
+        'services-phone-video',
+        'alejandro_services_phone_page',
+        'dashicons-smartphone',
+        32
+    );
+}
+add_action('admin_menu', 'alejandro_add_services_phone_menu');
+
+function alejandro_services_phone_page() {
+    if (isset($_POST['save_services_phone_video']) && check_admin_referer('save_services_phone_video')) {
+        $video_id = isset($_POST['services_phone_video']) ? absint($_POST['services_phone_video']) : '';
+        update_option('services_phone_video', $video_id);
+        echo '<div class="notice notice-success"><p>Video saved successfully!</p></div>';
+    }
+
+    $saved_video_id = get_option('services_phone_video', '');
+    $video_url = $saved_video_id ? wp_get_attachment_url($saved_video_id) : '';
+    ?>
+    <div class="wrap">
+        <h1>Services Phone Video</h1>
+        <p>Upload a video to display inside the iPhone mockup in the "Services That Drive Results" section.</p>
+        <p><strong>Tip:</strong> For the best look, use a vertical video (9:16 aspect ratio, e.g. 1080x1920). MP4 format recommended.</p>
+
+        <form method="post">
+            <?php wp_nonce_field('save_services_phone_video'); ?>
+
+            <table class="form-table">
+                <tr>
+                    <th><label>Phone Video</label></th>
+                    <td>
+                        <input type="hidden" id="services_phone_video" name="services_phone_video" value="<?php echo esc_attr($saved_video_id); ?>">
+                        <div id="phone-video-preview" style="margin: 10px 0;">
+                            <?php if ($video_url) : ?>
+                                <video src="<?php echo esc_url($video_url); ?>" style="max-width: 300px; border-radius: 8px;" controls muted></video>
+                            <?php endif; ?>
+                        </div>
+                        <button type="button" id="upload-phone-video" class="button button-secondary">Select Video</button>
+                        <button type="button" id="remove-phone-video" class="button" <?php echo !$saved_video_id ? 'style="display:none;"' : ''; ?>>Remove Video</button>
+                    </td>
+                </tr>
+            </table>
+
+            <input type="submit" name="save_services_phone_video" class="button button-primary" value="Save Video">
+        </form>
+    </div>
+
+    <script>
+    jQuery(document).ready(function($) {
+        var videoUploader;
+
+        $('#upload-phone-video').on('click', function(e) {
+            e.preventDefault();
+            if (videoUploader) {
+                videoUploader.open();
+                return;
+            }
+            videoUploader = wp.media({
+                title: 'Select Video',
+                button: { text: 'Use This Video' },
+                multiple: false,
+                library: { type: 'video' }
+            });
+            videoUploader.on('select', function() {
+                var attachment = videoUploader.state().get('selection').first().toJSON();
+                $('#services_phone_video').val(attachment.id);
+                $('#phone-video-preview').html('<video src="' + attachment.url + '" style="max-width: 300px; border-radius: 8px;" controls muted></video>');
+                $('#remove-phone-video').show();
+            });
+            videoUploader.open();
+        });
+
+        $('#remove-phone-video').on('click', function(e) {
+            e.preventDefault();
+            $('#services_phone_video').val('');
+            $('#phone-video-preview').html('');
+            $(this).hide();
+        });
+    });
+    </script>
+    <?php
+}
+
 // Allow JSON file uploads for Lottie animations
 function alejandro_allow_json_uploads($mimes) {
     $mimes['json'] = 'application/json';
@@ -637,7 +852,7 @@ function alejandro_customize_register($wp_customize) {
     ));
 
     $wp_customize->add_setting('contact_email', array(
-        'default'           => 'hello@alejandrosilva.com',
+        'default'           => 'alejsilvadev@gmail.com',
         'sanitize_callback' => 'sanitize_email',
     ));
 
@@ -705,26 +920,3 @@ function alejandro_customize_register($wp_customize) {
 }
 add_action('customize_register', 'alejandro_customize_register');
 
-// Handle contact form submission
-function alejandro_handle_contact_form() {
-    if (isset($_POST['alejandro_contact_submit'])) {
-        $name = sanitize_text_field($_POST['contact_name']);
-        $email = sanitize_email($_POST['contact_email']);
-        $message = sanitize_textarea_field($_POST['contact_message']);
-
-        $to = get_theme_mod('contact_email', get_option('admin_email'));
-        $subject = 'New Contact Form Submission from ' . $name;
-        $body = "Name: $name\nEmail: $email\n\nMessage:\n$message";
-        $headers = array('Content-Type: text/plain; charset=UTF-8', 'Reply-To: ' . $email);
-
-        if (wp_mail($to, $subject, $body, $headers)) {
-            set_transient('contact_form_success', true, 30);
-        } else {
-            set_transient('contact_form_error', true, 30);
-        }
-
-        wp_redirect(home_url('/#contact'));
-        exit;
-    }
-}
-add_action('init', 'alejandro_handle_contact_form');

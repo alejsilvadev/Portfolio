@@ -9,7 +9,7 @@
         <div class="section-header">
             <span class="section-label">Projects</span>
             <h2 class="section-title">Stuff I've Been Working On</h2>
-            <p class="section-subtitle">Take a look at some of my recent projects that showcase my skills and expertise.</p>
+            <p class="section-subtitle">Take a look at some of my recent projects that showcase my skills.</p>
         </div>
         <div class="projects-grid">
             <?php
