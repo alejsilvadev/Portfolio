@@ -34,13 +34,39 @@ function alejandro_enqueue_assets() {
         null
     );
 
-    // Theme stylesheet
+    // Theme stylesheet (base/global)
     wp_enqueue_style(
         'alejandro-style',
         get_stylesheet_uri(),
         array(),
         wp_get_theme()->get('Version')
     );
+
+    // Forms stylesheet
+    wp_enqueue_style(
+        'alejandro-forms',
+        get_template_directory_uri() . '/css/forms.css',
+        array('alejandro-style'),
+        wp_get_theme()->get('Version')
+    );
+
+    // Portfolio stylesheet
+    wp_enqueue_style(
+        'alejandro-portfolio',
+        get_template_directory_uri() . '/css/portfolio.css',
+        array('alejandro-style'),
+        wp_get_theme()->get('Version')
+    );
+
+    // Front page stylesheet
+    if (is_front_page()) {
+        wp_enqueue_style(
+            'alejandro-front-page',
+            get_template_directory_uri() . '/css/front-page.css',
+            array('alejandro-style'),
+            wp_get_theme()->get('Version')
+        );
+    }
 
     // GSAP Library
     wp_enqueue_script(

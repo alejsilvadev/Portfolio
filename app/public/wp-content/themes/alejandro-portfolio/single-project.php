@@ -17,7 +17,11 @@ $lottie_url = $highlight_lottie ? wp_get_attachment_url($highlight_lottie) : '';
 
 <section class="project-single">
     <div class="container">
-        <a href="<?php echo home_url('/#projects'); ?>" class="back-link">
+        <?php
+        $portfolio_pages = get_pages(array('meta_key' => '_wp_page_template', 'meta_value' => 'page-portfolio.php'));
+        $back_url = !empty($portfolio_pages) ? get_permalink($portfolio_pages[0]->ID) . '#projects' : home_url('/');
+        ?>
+        <a href="<?php echo esc_url($back_url); ?>" class="back-link">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M19 12H5M12 19l-7-7 7-7"/>
             </svg>
