@@ -166,21 +166,39 @@ add_action('add_meta_boxes', 'alejandro_project_meta_boxes');
 function alejandro_project_meta_callback($post) {
     wp_nonce_field('alejandro_project_meta', 'alejandro_project_nonce');
 
-    $live_url = get_post_meta($post->ID, '_project_live_url', true);
-    $github_url = get_post_meta($post->ID, '_project_github_url', true);
+    $live_links  = get_post_meta($post->ID, '_project_live_links', true);
+    $live_url    = get_post_meta($post->ID, '_project_live_url', true); // legacy
+    $github_url  = get_post_meta($post->ID, '_project_github_url', true);
     $technologies = get_post_meta($post->ID, '_project_technologies', true);
     $order_number = get_post_meta($post->ID, '_project_order', true);
+
+    // Migrate legacy single URL into the new format
+    if (empty($live_links) && $live_url) {
+        $live_links = array(array('label' => '', 'url' => $live_url));
+    }
+    if (!is_array($live_links)) {
+        $live_links = array();
+    }
     ?>
     <p>
         <label for="project_order"><strong>Display Order:</strong></label><br>
         <input type="number" id="project_order" name="project_order" value="<?php echo esc_attr($order_number); ?>" style="width: 100px;" min="1" placeholder="1">
         <span style="color: #666; margin-left: 10px;">Lower numbers appear first on the homepage</span>
     </p>
-    <p>
-        <label for="project_live_url"><strong>Live URL:</strong></label><br>
-        <input type="url" id="project_live_url" name="project_live_url" value="<?php echo esc_attr($live_url); ?>" style="width: 100%;">
-    </p>
-    <p>
+
+    <p><strong>Live Links:</strong> <span style="color:#666;font-size:12px;">Each link becomes a button on the project page. Leave label blank for a generic "View Live Site" label.</span></p>
+    <div id="live-links-list">
+        <?php foreach ($live_links as $i => $link) : ?>
+            <div class="live-link-row" style="display:flex;gap:8px;margin-bottom:8px;align-items:center;">
+                <input type="text" name="project_live_links[<?php echo $i; ?>][label]" placeholder="Label (e.g. Live Demo)" value="<?php echo esc_attr($link['label'] ?? ''); ?>" style="width:200px;">
+                <input type="url"  name="project_live_links[<?php echo $i; ?>][url]"   placeholder="https://..." value="<?php echo esc_attr($link['url'] ?? ''); ?>" style="flex:1;">
+                <button type="button" class="button remove-live-link">Remove</button>
+            </div>
+        <?php endforeach; ?>
+    </div>
+    <button type="button" id="add-live-link" class="button button-secondary">+ Add Live Link</button>
+
+    <p style="margin-top:16px;">
         <label for="project_github_url"><strong>GitHub URL:</strong></label><br>
         <input type="url" id="project_github_url" name="project_github_url" value="<?php echo esc_attr($github_url); ?>" style="width: 100%;">
     </p>
@@ -188,6 +206,26 @@ function alejandro_project_meta_callback($post) {
         <label for="project_technologies"><strong>Technologies (comma-separated):</strong></label><br>
         <input type="text" id="project_technologies" name="project_technologies" value="<?php echo esc_attr($technologies); ?>" style="width: 100%;" placeholder="React, Node.js, MongoDB">
     </p>
+
+    <script>
+    jQuery(document).ready(function($) {
+        var liveLinkIndex = $('#live-links-list .live-link-row').length;
+
+        $('#add-live-link').on('click', function() {
+            var html = '<div class="live-link-row" style="display:flex;gap:8px;margin-bottom:8px;align-items:center;">' +
+                '<input type="text" name="project_live_links[' + liveLinkIndex + '][label]" placeholder="Label (e.g. Live Demo)" style="width:200px;">' +
+                '<input type="url"  name="project_live_links[' + liveLinkIndex + '][url]"   placeholder="https://..." style="flex:1;">' +
+                '<button type="button" class="button remove-live-link">Remove</button>' +
+                '</div>';
+            $('#live-links-list').append(html);
+            liveLinkIndex++;
+        });
+
+        $(document).on('click', '.remove-live-link', function() {
+            $(this).closest('.live-link-row').remove();
+        });
+    });
+    </script>
     <?php
 }
 
@@ -200,9 +238,20 @@ function alejandro_save_project_meta($post_id) {
         return;
     }
 
-    if (isset($_POST['project_live_url'])) {
-        update_post_meta($post_id, '_project_live_url', esc_url_raw($_POST['project_live_url']));
+    // Save multiple live links
+    $live_links = array();
+    if (isset($_POST['project_live_links']) && is_array($_POST['project_live_links'])) {
+        foreach ($_POST['project_live_links'] as $link) {
+            $url = esc_url_raw($link['url'] ?? '');
+            if ($url) {
+                $live_links[] = array(
+                    'label' => sanitize_text_field($link['label'] ?? ''),
+                    'url'   => $url,
+                );
+            }
+        }
     }
+    update_post_meta($post_id, '_project_live_links', $live_links);
 
     if (isset($_POST['project_github_url'])) {
         update_post_meta($post_id, '_project_github_url', esc_url_raw($_POST['project_github_url']));
