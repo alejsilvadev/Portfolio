@@ -17,8 +17,8 @@
         <nav class="main-nav">
             <ul>
                 <li><a href="<?php echo esc_url(home_url('/')); ?>">Home</a></li>
+                <li><a href="<?php echo esc_url(home_url('/services')); ?>">Services</a></li>
                 <li><a href="<?php echo esc_url(home_url('/portfolio')); ?>">Portfolio</a></li>
-                <li><a href="<?php echo esc_url(home_url('/portfolio#projects')); ?>">Projects</a></li>
                 <li><a href="<?php echo esc_url(home_url('/contact')); ?>">Contact</a></li>
             </ul>
         </nav>

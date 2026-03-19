@@ -26,7 +26,7 @@ $skills = get_theme_mod('skills', 'HTML5, CSS3, JavaScript, React, Node.js, PHP,
                 </lottie-player>
             </div>
             <div class="about-text">
-                <h3>Building things and vibing</h3>
+                <h3>I like to make cool stuff</h3>
                 <p><?php echo esc_html($about_text); ?></p>
                 <div class="skills-list">
                     <?php

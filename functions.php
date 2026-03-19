@@ -68,6 +68,16 @@ function alejandro_enqueue_assets() {
         );
     }
 
+    // Services page stylesheet
+    if (is_page_template('page-services.php') || is_front_page()) {
+        wp_enqueue_style(
+            'alejandro-services',
+            get_template_directory_uri() . '/css/services.css',
+            array('alejandro-style'),
+            wp_get_theme()->get('Version')
+        );
+    }
+
     // GSAP Library
     wp_enqueue_script(
         'gsap',
@@ -166,21 +176,39 @@ add_action('add_meta_boxes', 'alejandro_project_meta_boxes');
 function alejandro_project_meta_callback($post) {
     wp_nonce_field('alejandro_project_meta', 'alejandro_project_nonce');
 
-    $live_url = get_post_meta($post->ID, '_project_live_url', true);
-    $github_url = get_post_meta($post->ID, '_project_github_url', true);
+    $live_links  = get_post_meta($post->ID, '_project_live_links', true);
+    $live_url    = get_post_meta($post->ID, '_project_live_url', true); // legacy
+    $github_url  = get_post_meta($post->ID, '_project_github_url', true);
     $technologies = get_post_meta($post->ID, '_project_technologies', true);
     $order_number = get_post_meta($post->ID, '_project_order', true);
+
+    // Migrate legacy single URL into the new format
+    if (empty($live_links) && $live_url) {
+        $live_links = array(array('label' => '', 'url' => $live_url));
+    }
+    if (!is_array($live_links)) {
+        $live_links = array();
+    }
     ?>
     <p>
         <label for="project_order"><strong>Display Order:</strong></label><br>
         <input type="number" id="project_order" name="project_order" value="<?php echo esc_attr($order_number); ?>" style="width: 100px;" min="1" placeholder="1">
         <span style="color: #666; margin-left: 10px;">Lower numbers appear first on the homepage</span>
     </p>
-    <p>
-        <label for="project_live_url"><strong>Live URL:</strong></label><br>
-        <input type="url" id="project_live_url" name="project_live_url" value="<?php echo esc_attr($live_url); ?>" style="width: 100%;">
-    </p>
-    <p>
+
+    <p><strong>Live Links:</strong> <span style="color:#666;font-size:12px;">Each link becomes a button on the project page. Leave label blank for a generic "View Live Site" label.</span></p>
+    <div id="live-links-list">
+        <?php foreach ($live_links as $i => $link) : ?>
+            <div class="live-link-row" style="display:flex;gap:8px;margin-bottom:8px;align-items:center;">
+                <input type="text" name="project_live_links[<?php echo $i; ?>][label]" placeholder="Label (e.g. Live Demo)" value="<?php echo esc_attr($link['label'] ?? ''); ?>" style="width:200px;">
+                <input type="url"  name="project_live_links[<?php echo $i; ?>][url]"   placeholder="https://..." value="<?php echo esc_attr($link['url'] ?? ''); ?>" style="flex:1;">
+                <button type="button" class="button remove-live-link">Remove</button>
+            </div>
+        <?php endforeach; ?>
+    </div>
+    <button type="button" id="add-live-link" class="button button-secondary">+ Add Live Link</button>
+
+    <p style="margin-top:16px;">
         <label for="project_github_url"><strong>GitHub URL:</strong></label><br>
         <input type="url" id="project_github_url" name="project_github_url" value="<?php echo esc_attr($github_url); ?>" style="width: 100%;">
     </p>
@@ -188,6 +216,26 @@ function alejandro_project_meta_callback($post) {
         <label for="project_technologies"><strong>Technologies (comma-separated):</strong></label><br>
         <input type="text" id="project_technologies" name="project_technologies" value="<?php echo esc_attr($technologies); ?>" style="width: 100%;" placeholder="React, Node.js, MongoDB">
     </p>
+
+    <script>
+    jQuery(document).ready(function($) {
+        var liveLinkIndex = $('#live-links-list .live-link-row').length;
+
+        $('#add-live-link').on('click', function() {
+            var html = '<div class="live-link-row" style="display:flex;gap:8px;margin-bottom:8px;align-items:center;">' +
+                '<input type="text" name="project_live_links[' + liveLinkIndex + '][label]" placeholder="Label (e.g. Live Demo)" style="width:200px;">' +
+                '<input type="url"  name="project_live_links[' + liveLinkIndex + '][url]"   placeholder="https://..." style="flex:1;">' +
+                '<button type="button" class="button remove-live-link">Remove</button>' +
+                '</div>';
+            $('#live-links-list').append(html);
+            liveLinkIndex++;
+        });
+
+        $(document).on('click', '.remove-live-link', function() {
+            $(this).closest('.live-link-row').remove();
+        });
+    });
+    </script>
     <?php
 }
 
@@ -200,9 +248,20 @@ function alejandro_save_project_meta($post_id) {
         return;
     }
 
-    if (isset($_POST['project_live_url'])) {
-        update_post_meta($post_id, '_project_live_url', esc_url_raw($_POST['project_live_url']));
+    // Save multiple live links
+    $live_links = array();
+    if (isset($_POST['project_live_links']) && is_array($_POST['project_live_links'])) {
+        foreach ($_POST['project_live_links'] as $link) {
+            $url = esc_url_raw($link['url'] ?? '');
+            if ($url) {
+                $live_links[] = array(
+                    'label' => sanitize_text_field($link['label'] ?? ''),
+                    'url'   => $url,
+                );
+            }
+        }
     }
+    update_post_meta($post_id, '_project_live_links', $live_links);
 
     if (isset($_POST['project_github_url'])) {
         update_post_meta($post_id, '_project_github_url', esc_url_raw($_POST['project_github_url']));
@@ -374,7 +433,7 @@ function alejandro_project_highlight_callback($post) {
 
 // Enqueue media uploader for admin
 function alejandro_enqueue_admin_scripts($hook) {
-    if ($hook === 'post.php' || $hook === 'post-new.php' || $hook === 'toplevel_page_logo-carousel' || $hook === 'toplevel_page_portfolio-showcase') {
+    if ($hook === 'post.php' || $hook === 'post-new.php' || $hook === 'toplevel_page_logo-carousel' || $hook === 'toplevel_page_portfolio-showcase' || $hook === 'toplevel_page_services-settings') {
         wp_enqueue_media();
     }
 }
@@ -790,6 +849,129 @@ function alejandro_services_phone_page() {
             $('#phone-video-preview').html('');
             $(this).hide();
         });
+    });
+    </script>
+    <?php
+}
+
+// Services Page Settings Admin Page
+function alejandro_add_services_settings_menu() {
+    add_menu_page(
+        'Services Page Settings',
+        'Services Page',
+        'manage_options',
+        'services-settings',
+        'alejandro_services_settings_page',
+        'dashicons-admin-generic',
+        32
+    );
+}
+add_action('admin_menu', 'alejandro_add_services_settings_menu');
+
+function alejandro_services_settings_page() {
+    if (isset($_POST['save_services_settings']) && check_admin_referer('save_services_settings')) {
+        $image_id  = isset($_POST['services_hero_bg_id'])  ? absint($_POST['services_hero_bg_id'])       : '';
+        $image_url = isset($_POST['services_hero_bg_url']) ? esc_url_raw($_POST['services_hero_bg_url']) : '';
+        update_option('services_hero_bg_id',  $image_id);
+        update_option('services_hero_bg_url', $image_url);
+
+        $cta_id  = isset($_POST['services_cta_bg_id'])  ? absint($_POST['services_cta_bg_id'])       : '';
+        $cta_url = isset($_POST['services_cta_bg_url']) ? esc_url_raw($_POST['services_cta_bg_url']) : '';
+        update_option('services_cta_bg_id',  $cta_id);
+        update_option('services_cta_bg_url', $cta_url);
+
+        echo '<div class="notice notice-success"><p>Services page settings saved!</p></div>';
+    }
+
+    $saved_id  = get_option('services_hero_bg_id',  '');
+    $saved_url = get_option('services_hero_bg_url', '');
+    $preview   = $saved_id ? wp_get_attachment_image_url($saved_id, 'large') : $saved_url;
+
+    $cta_saved_id  = get_option('services_cta_bg_id',  '');
+    $cta_saved_url = get_option('services_cta_bg_url', '');
+    $cta_preview   = $cta_saved_id ? wp_get_attachment_image_url($cta_saved_id, 'large') : $cta_saved_url;
+    ?>
+    <div class="wrap">
+        <h1>Services Page Settings</h1>
+        <p>Upload background images for the Services page sections.</p>
+        <p><strong>Tip:</strong> Use wide landscape images (at least 1600&times;900px) for the best result.</p>
+
+        <form method="post">
+            <?php wp_nonce_field('save_services_settings'); ?>
+
+            <table class="form-table">
+                <tr>
+                    <th><label>Hero Background Image</label></th>
+                    <td>
+                        <input type="hidden" id="services_hero_bg_id"  name="services_hero_bg_id"  value="<?php echo esc_attr($saved_id); ?>">
+                        <input type="hidden" id="services_hero_bg_url" name="services_hero_bg_url" value="<?php echo esc_url($saved_url); ?>">
+                        <div id="services-hero-bg-preview" style="margin: 10px 0;">
+                            <?php if ($preview) : ?>
+                                <img src="<?php echo esc_url($preview); ?>" style="max-width: 480px; height: 200px; object-fit: cover; border-radius: 8px; display: block;">
+                            <?php endif; ?>
+                        </div>
+                        <button type="button" id="upload-services-hero-bg" class="button button-secondary">Select Image</button>
+                        <button type="button" id="remove-services-hero-bg" class="button" <?php echo !$saved_id ? 'style="display:none;"' : ''; ?>>Remove Image</button>
+                        <p class="description">Displays as a faint texture behind the hero headline.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th><label>CTA Background Image</label></th>
+                    <td>
+                        <input type="hidden" id="services_cta_bg_id"  name="services_cta_bg_id"  value="<?php echo esc_attr($cta_saved_id); ?>">
+                        <input type="hidden" id="services_cta_bg_url" name="services_cta_bg_url" value="<?php echo esc_url($cta_saved_url); ?>">
+                        <div id="services-cta-bg-preview" style="margin: 10px 0;">
+                            <?php if ($cta_preview) : ?>
+                                <img src="<?php echo esc_url($cta_preview); ?>" style="max-width: 480px; height: 200px; object-fit: cover; border-radius: 8px; display: block;">
+                            <?php endif; ?>
+                        </div>
+                        <button type="button" id="upload-services-cta-bg" class="button button-secondary">Select Image</button>
+                        <button type="button" id="remove-services-cta-bg" class="button" <?php echo !$cta_saved_id ? 'style="display:none;"' : ''; ?>>Remove Image</button>
+                        <p class="description">Sits behind the dark blue overlay in the "Ready to Build" CTA section at the bottom of the page.</p>
+                    </td>
+                </tr>
+            </table>
+
+            <p class="submit">
+                <input type="submit" name="save_services_settings" class="button button-primary" value="Save Settings">
+            </p>
+        </form>
+    </div>
+
+    <script>
+    jQuery(document).ready(function($) {
+        function makeUploader(uploadBtnId, removeBtnId, hiddenIdField, hiddenUrlField, previewId) {
+            var uploader;
+            $('#' + uploadBtnId).on('click', function(e) {
+                e.preventDefault();
+                if (uploader) { uploader.open(); return; }
+                uploader = wp.media({
+                    title: 'Select Background Image',
+                    button: { text: 'Use This Image' },
+                    multiple: false,
+                    library: { type: 'image' }
+                });
+                uploader.on('select', function() {
+                    var attachment = uploader.state().get('selection').first().toJSON();
+                    var imgUrl = attachment.sizes.large ? attachment.sizes.large.url : attachment.url;
+                    $('#' + hiddenIdField).val(attachment.id);
+                    $('#' + hiddenUrlField).val(attachment.url);
+                    $('#' + previewId).html('<img src="' + imgUrl + '" style="max-width: 480px; height: 200px; object-fit: cover; border-radius: 8px; display: block;">');
+                    $('#' + removeBtnId).show();
+                });
+                uploader.open();
+            });
+            $('#' + removeBtnId).on('click', function(e) {
+                e.preventDefault();
+                $('#' + hiddenIdField).val('');
+                $('#' + hiddenUrlField).val('');
+                $('#' + previewId).html('');
+                $(this).hide();
+            });
+        }
+
+        makeUploader('upload-services-hero-bg', 'remove-services-hero-bg', 'services_hero_bg_id', 'services_hero_bg_url', 'services-hero-bg-preview');
+        makeUploader('upload-services-cta-bg',  'remove-services-cta-bg',  'services_cta_bg_id',  'services_cta_bg_url',  'services-cta-bg-preview');
     });
     </script>
     <?php

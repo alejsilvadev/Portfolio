@@ -15,26 +15,28 @@ $social_twitter = get_theme_mod('social_twitter', '#');
 
 <section class="contact-page">
     <div class="container">
-        <div class="section-header">
-            <span class="section-label">Get In Touch</span>
-            <h1 class="section-title">Let's Work Together</h1>
-            <p class="section-subtitle">Have a project in mind? I'd love to hear about it. Send me a message and let's create something amazing.</p>
+
+        <!-- Header row: text left, lottie right -->
+        <div class="contact-page-header-row">
+            <div class="contact-page-header-text">
+                <span class="section-label">Get In Touch</span>
+                <h1 class="section-title">Let's Work Together</h1>
+                <p class="section-subtitle">Have a project in mind? I'd love to hear about it. Send me a message and let's create something amazing.</p>
+            </div>
+            <div class="contact-page-lottie">
+                <lottie-player
+                    src="<?php echo esc_url(get_template_directory_uri() . '/assets/contact.json'); ?>"
+                    background="transparent"
+                    speed="1"
+                    loop
+                    autoplay>
+                </lottie-player>
+            </div>
         </div>
 
         <div class="contact-page-content">
-            <!-- Left Column: Lottie Animation + Contact Info -->
+            <!-- Left Column: Contact Info -->
             <div class="contact-page-left">
-                <div class="contact-page-lottie">
-                    <!-- Replace the src with your Lottie animation JSON URL -->
-                    <lottie-player
-                        src="<?php echo esc_url(get_template_directory_uri() . '/assets/contact.json'); ?>"
-                        background="transparent"
-                        speed="1"
-                        loop
-                        autoplay>
-                    </lottie-player>
-                </div>
-
                 <div class="contact-page-info">
                     <h3>Contact Information</h3>
                     <div class="contact-item">

@@ -11,14 +11,14 @@ get_header();
     <div class="container">
         <div class="home-hero-content">
             <div class="home-hero-text">
-                <span class="home-hero-badge">Web Developer & Automation Expert</span>
+                <span class="home-hero-badge">Web Development Expert</span>
                 <h1 class="home-hero-title">Custom Websites That <span class="gradient-text">Stand Out</span></h1>
 
                 <div class="typewriter-wrapper">
                     <span class="typewriter-text"></span><span class="typewriter-cursor">|</span>
                 </div>
 
-                <p class="home-hero-description">I will provide everything you need to build and optimize your online presence. From custom web development to automation solutions that streamline your workflows, my goal is to help your business run smarter and stand out online. </p>
+                <p class="home-hero-description">I will provide everything you need to build and optimize your online presence. With custom design and development, my goal is to help your business run smarter and stand out online. </p>
 
                 <div class="home-hero-buttons">
                     <a href="#pricing" class="btn btn-primary">View Packages</a>
@@ -186,17 +186,18 @@ get_header();
                 <div class="service-item-header">
                     <div class="service-icon">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="3"></circle>
-                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="3" y1="9" x2="21" y2="9"></line>
+                            <line x1="9" y1="21" x2="9" y2="9"></line>
                         </svg>
                     </div>
-                    <h3>n8n Automations</h3>
+                    <h3>ACF Integration</h3>
                 </div>
                 <div class="service-item-body">
-                    <p>Automate annoying repetitive tasks and connect your tools. From email workflows to data sync, save hours every week with smart automations using n8n.io.</p>
+                    <p>Using Advanced Custom Fields, I build custom admin panels so you can update text, images, and content across your site through simple, clearly labeled fields — no page builder or code needed.</p>
                 </div>
             </div>
-                        <div class="service-item">
+            <div class="service-item">
                 <div class="service-item-header">
                     <div class="service-icon">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -319,206 +320,73 @@ get_header();
             <h2 class="section-title">Simple, Transparent Pricing</h2>
             <p class="section-subtitle">Choose the package that fits your needs. All packages include WordPress CMS and mobile-responsive design.</p>
         </div>
-        <div class="pricing-grid">
-            <div class="pricing-card">
-                <div class="pricing-header">
+        <div class="sp-packages">
+
+            <div class="sp-card">
+                <div class="sp-card-header">
                     <h3>Starter</h3>
-                    <p class="pricing-description">Perfect for small businesses and personal brands</p>
-                    <div class="pricing-price">
-                        <span class="price-currency"><sup>$</sup></span>
-                        <span class="price-amount">500</span>
+                    <p class="sp-card-desc">Perfect for small businesses and personal brands that need a clean, professional online presence fast.</p>
+                    <div class="sp-price">
+                        <sup>$</sup><span>750</span>
                     </div>
                 </div>
-                <ul class="pricing-features">
-                    <li>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        Up to 3 pages
-                    </li>
-                    <li>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        Mobile responsive design
-                    </li>
-                    <li>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        WordPress CMS
-                    </li>
-                    <li>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        Contact form
-                    </li>
-                    <li>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        Basic SEO setup
-                    </li>
-                    <li>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        2 weeks delivery
-                    </li>
+                <ul class="sp-features">
+                    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>Up to 3 pages</li>
+                    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>Custom design (no templates)</li>
+                    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>WordPress CMS</li>
+                    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>Mobile responsive</li>
+                    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>Contact form</li>
+                    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>Basic SEO setup</li>
+                    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>2 weeks delivery</li>
                 </ul>
-                <a href="#contact" class="btn btn-secondary pricing-btn">Get Started</a>
+                <a href="#contact" class="btn btn-secondary sp-btn">Get Started</a>
             </div>
-            <div class="pricing-card featured">
-                <div class="pricing-badge">Most Popular</div>
-                <div class="pricing-header">
+
+            <div class="sp-card sp-card--featured">
+                <div class="sp-badge">Most Popular</div>
+                <div class="sp-card-header">
                     <h3>Professional</h3>
-                    <p class="pricing-description">For growing businesses that need more features</p>
-                    <div class="pricing-price">
-                        <span class="price-currency"><sup>$</sup></span>
-                        <span class="price-amount">1,000</span>
+                    <p class="sp-card-desc">Built for growing businesses that need more pages, more features, and a site that works harder to bring in leads.</p>
+                    <div class="sp-price">
+                        <sup>$</sup><span>1,750</span>
                     </div>
                 </div>
-                <ul class="pricing-features">
-                    <li>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        Up to 8 pages
-                    </li>
-                    <li>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        Custom design
-                    </li>
-                    <li>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        WordPress CMS
-                    </li>
-                    <li>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        Blog setup
-                    </li>
-                    <li>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        Advanced SEO 
-                    </li>
-                    <li>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        Google Analytics setup
-                    </li>
-                    <li>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        3 weeks delivery
-                    </li>
+                <ul class="sp-features">
+                    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>Up to 8 pages</li>
+                    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>Custom design (no templates)</li>
+                    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>WordPress CMS with ACF</li>
+                    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>Mobile responsive</li>
+                    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>Blog setup</li>
+                    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>Advanced SEO</li>
+                    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>Google Analytics setup</li>
+                    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>3 weeks delivery</li>
                 </ul>
-                <a href="#contact" class="btn btn-primary pricing-btn">Get Started</a>
+                <a href="#contact" class="btn btn-primary sp-btn">Get Started</a>
             </div>
-            <div class="pricing-card">
-                <div class="pricing-header">
+
+            <div class="sp-card">
+                <div class="sp-card-header">
                     <h3>Enterprise</h3>
-                    <p class="pricing-description">Custom solutions for complex requirements</p>
-                    <div class="pricing-price">
-                        <span class="price-amount custom">Let's Talk</span>
+                    <p class="sp-card-desc">For businesses with complex requirements — custom functionality, integrations, and everything built exactly to spec.</p>
+                    <div class="sp-price sp-price--custom">
+                        <span>Let's Talk</span>
                     </div>
                 </div>
-                <ul class="pricing-features">
-                    <li>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        Plugin integration
-                    </li>
-                    <li>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        E-commerce / Booking systems
-                    </li>
-                    <li>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        Custom functionality
-                    </li>
-                    <li>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        API integrations
-                    </li>
-                    <li>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        Priority support
-                    </li>
-                    <li>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        Ongoing maintenance
-                    </li>
+                <ul class="sp-features">
+                    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>Unlimited pages</li>
+                    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>Custom functionality & plugins</li>
+                    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>Third-party API integrations</li>
+                    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>E-commerce & booking systems</li>
+                    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>Priority support & maintenance</li>
+                    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>Timeline discussed per project</li>
                 </ul>
-                <a href="#contact" class="btn btn-secondary pricing-btn">Contact Me</a>
+                <a href="#contact" class="btn btn-secondary sp-btn">Contact Me</a>
             </div>
+
         </div>
     </div>
 </section>
 
-
-<!-- Automation Section -->
-<section id="automation" class="home-automation">
-    <div class="container">
-        <div class="section-header">
-            <span class="section-label">n8n Automation Services</span>
-            <h2 class="section-title">Automate Your Business Workflows</h2>
-            <p class="section-subtitle">Stop wasting hours on busy work. I build custom automations that connect your tools and run your workflows on autopilot.</p>
-        </div>
-        <div class="automation-content">
-                <lottie-player
-                    src="<?php echo get_template_directory_uri(); ?>/assets/automation.json"
-                    background="transparent"
-                    speed="1"
-                    style="width: 400px; height: 400px;"
-                    loop
-                    autoplay>
-                </lottie-player>
-            <div class="automation-text">
-                <h3>What Can Be Automated?</h3>
-                <ul class="automation-list">
-                    <li>
-                        <strong>Lead Management</strong> — Automatically capture leads from forms, send follow-up emails, and add them to your CRM
-                    </li>
-                    <li>
-                        <strong>Social Media</strong> — Auto-post to multiple platforms when you publish new content
-                    </li>
-                    <li>
-                        <strong>Notifications & Alerts</strong> — Get instant alerts for orders, form submissions, or custom triggers
-                    </li>
-                    <li>
-                        <strong>Report Generation</strong> — Automatically compile and send daily, weekly, or monthly reports
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="automation-cta">
-                <p class="automation-cta-text">Every business is different. Let's discuss your workflows and create a custom automation solution.</p>
-                <a href="#contact" class="btn btn-primary">Contact for Pricing</a>
-            </div>
-    </div>
-</section>
 
 <!-- Contact Form Section -->
 <section id="contact" class="home-contact">
@@ -537,13 +405,13 @@ get_header();
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
-                        <span>Fast turnaround</span>
+                        <span>Fast Turnaround</span>
                     </li>
                     <li>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
-                        <span>Clear communication</span>
+                        <span>Clear Communication</span>
                     </li>
                     <li>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

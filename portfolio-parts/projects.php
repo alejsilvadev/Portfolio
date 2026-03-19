@@ -15,7 +15,7 @@
             <?php
             $projects = new WP_Query(array(
                 'post_type'      => 'project',
-                'posts_per_page' => 6,
+                'posts_per_page' => -1,
                 'meta_key'       => '_project_order',
                 'orderby'        => array(
                     'meta_value_num' => 'ASC',

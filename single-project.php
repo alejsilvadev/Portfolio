@@ -4,7 +4,14 @@
  */
 get_header();
 
-$live_url = get_post_meta(get_the_ID(), '_project_live_url', true);
+$live_links = get_post_meta(get_the_ID(), '_project_live_links', true);
+$live_url   = get_post_meta(get_the_ID(), '_project_live_url', true); // legacy fallback
+if (empty($live_links) && $live_url) {
+    $live_links = array(array('label' => '', 'url' => $live_url));
+}
+if (!is_array($live_links)) {
+    $live_links = array();
+}
 $github_url = get_post_meta(get_the_ID(), '_project_github_url', true);
 $technologies = get_post_meta(get_the_ID(), '_project_technologies', true);
 $highlight_title = get_post_meta(get_the_ID(), '_project_highlight_title', true);
@@ -17,7 +24,11 @@ $lottie_url = $highlight_lottie ? wp_get_attachment_url($highlight_lottie) : '';
 
 <section class="project-single">
     <div class="container">
-        <a href="<?php echo home_url('/#projects'); ?>" class="back-link">
+        <?php
+        $portfolio_pages = get_pages(array('meta_key' => '_wp_page_template', 'meta_value' => 'page-portfolio.php'));
+        $back_url = !empty($portfolio_pages) ? get_permalink($portfolio_pages[0]->ID) . '#projects' : home_url('/');
+        ?>
+        <a href="<?php echo esc_url($back_url); ?>" class="back-link">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M19 12H5M12 19l-7-7 7-7"/>
             </svg>
@@ -51,14 +62,16 @@ $lottie_url = $highlight_lottie ? wp_get_attachment_url($highlight_lottie) : '';
 
             <div class="project-single-sidebar">
                 <div class="project-single-links">
-                    <?php if ($live_url) : ?>
-                        <a href="<?php echo esc_url($live_url); ?>" class="btn btn-primary" target="_blank" rel="noopener">
-                            View Live Site
+                    <?php foreach ($live_links as $link) : ?>
+                        <?php if (!empty($link['url'])) : ?>
+                        <a href="<?php echo esc_url($link['url']); ?>" class="btn btn-primary" target="_blank" rel="noopener">
+                            <?php echo esc_html($link['label'] ?: 'View Live Site'); ?>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/>
                             </svg>
                         </a>
-                    <?php endif; ?>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
                     <?php if ($github_url) : ?>
                         <a href="<?php echo esc_url($github_url); ?>" class="btn btn-secondary" target="_blank" rel="noopener">
                             View on GitHub

@@ -81,7 +81,6 @@ function initSectionAnimations() {
         // Homepage sections
         { selector: '.home-services', elements: ['.home-services .section-header', '.services-phone-mockup', '.service-item'] },
         { selector: '.home-showcase', elements: ['.home-showcase .section-header', '.showcase-gallery', '.showcase-info'] },
-        { selector: '.home-automation', elements: ['.home-automation .section-header', '.automation-visual', '.automation-text'] },
         { selector: '.home-pricing', elements: ['.home-pricing .section-header', '.pricing-card'] },
         { selector: '.home-contact', elements: ['.home-contact .section-header', '.home-contact-info', '.home-contact-form'] }
     ];
@@ -343,7 +342,7 @@ function initTypewriter() {
     var el = document.querySelector('.typewriter-text');
     if (!el) return;
 
-    var phrases = ['Website Development', 'Workflow Automation', 'Website Design'];
+    var phrases = ['Website Development', 'Website Design'];
     var phraseIndex = 0;
     var charIndex = 0;
     var isDeleting = false;
